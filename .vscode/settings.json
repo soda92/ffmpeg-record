@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.gradle": "groovy",
+        "*.json": "jsonc",
+        "*.spec": "ruby",
+        "thread": "cpp"
+    }
+}
