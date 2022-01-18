@@ -9,11 +9,13 @@
 
 #include <Windows.h>
 
-#if defined(_WINDLL)
-#define _VEDIOPLAY_API  extern "C" __declspec(dllexport)
-#else 
-#define _VEDIOPLAY_API  extern "C" __declspec(dllimport)
-#endif
+// #if defined(_WINDLL)
+// #define _VEDIOPLAY_API  extern "C" __declspec(dllexport)
+// #else 
+// #define _VEDIOPLAY_API  extern "C" __declspec(dllimport)
+// #endif
+
+#define _VEDIOPLAY_API
 
 #define MAX_PORT_NUM 99//最大支持的通道数
 

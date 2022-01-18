@@ -1465,7 +1465,7 @@ CutFile:
 
 	sprintf_s(FilePath, "%s/%d-%02d-%02d/", path, Time.wYear, Time.wMonth, Time.wDay);
 	CreateDirectory(FilePath, NULL);
-	sprintf_s(FileName, "%s%s_北京蓝天多维_%02d_%s_%d%02d%02d_%02d%02d%02d.mp4", FilePath, TrainNum, (ch == 0 ? nPort : ch), IPCName, Time.wYear, Time.wMonth, Time.wDay, Time.wHour, Time.wMinute, 0);
+	sprintf_s(FileName, "%s%s_VIDEO_%02d_%s_%d%02d%02d_%02d%02d%02d.mp4", FilePath, TrainNum, (ch == 0 ? nPort : ch), IPCName, Time.wYear, Time.wMonth, Time.wDay, Time.wHour, Time.wMinute, 0);
 
 	if (!(ofmt->flags & AVFMT_NOFILE))
 	{
