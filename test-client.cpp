@@ -11,14 +11,15 @@ using namespace boost;
 json::value
 parse_file(char const *filename)
 {
-    ifstream f;
-    f.open(filename);
+    ifstream f(filename, ifstream::binary);
     json::stream_parser p;
     json::error_code ec;
     do
     {
         char buf[4096];
-        auto const nread = f.readsome(buf, 4096);
+        f.read(buf, sizeof(buf));
+        // https://stackoverflow.com/a/1937416/12291425
+        auto const nread = f.gcount();
         // auto const nread = f.read(buf, sizeof(buf));
         p.write(buf, nread, ec);
     } while (!f.eof());
