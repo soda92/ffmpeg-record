@@ -55,8 +55,8 @@ typedef struct
 queue<PlayInfo *> InfoList;
 queue<PlayInfo *> InfoDecList;
 queue<PlayInfo *> RecordList;
-//list<PlayInfo*> InfoList;
-//PlayInfo CurrentInfo;
+// list<PlayInfo*> InfoList;
+// PlayInfo CurrentInfo;
 
 class CVideoBuf
 {
@@ -73,7 +73,7 @@ public:
 		delete[] Vbuf;
 	}
 };
-//queue<CVideoBuf*> VideoList[MAX_PORT_NUM];
+// queue<CVideoBuf*> VideoList[MAX_PORT_NUM];
 list<CVideoBuf *> VideoList[MAX_PORT_NUM];
 char PortBuf[MAX_PORT_NUM];
 
@@ -271,17 +271,17 @@ static void packet_queue_start(PacketQueue *q)
 	SDL_UnlockMutex(q->mutex);
 }
 
-//HANDLE hMutex;
+// HANDLE hMutex;
 
 int __stdcall Video_Init()
 {
 	av_register_all();
 	avformat_network_init();
-	//hMutex = CreateMutex(nullptr, FALSE, nullptr);
+	// hMutex = CreateMutex(nullptr, FALSE, nullptr);
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO))
 	{
-		//AfxMessageBox( "Could not initialize SDL\n");
+		// AfxMessageBox( "Could not initialize SDL\n");
 		return -1;
 	}
 
@@ -300,7 +300,7 @@ int __stdcall Video_Init()
 }
 int __stdcall Video_Destroy()
 {
-	//CloseHandle(hMutex);
+	// CloseHandle(hMutex);
 	SDL_Quit();
 	return 0;
 }
@@ -334,10 +334,10 @@ void audio_callback(void *userdata, Uint8 *stream, int len)
 			if (as->vClock - aClock > 0.5)
 			{
 				av_packet_unref(&pkt);
-				//TRACE("audio pkt give up.\n");
+				// TRACE("audio pkt give up.\n");
 				as->aClock = 0.0;
 				continue;
-				//as->aClock = aClock - as->vClock;
+				// as->aClock = aClock - as->vClock;
 			}
 			else if (aClock - as->vClock > 0.5)
 			{
@@ -351,17 +351,17 @@ void audio_callback(void *userdata, Uint8 *stream, int len)
 			if (got_frame)
 			{
 
-				//int out_count = (int64_t)pFrame->nb_samples * as->wanted_spec->freq / pFrame->sample_rate + 256;
+				// int out_count = (int64_t)pFrame->nb_samples * as->wanted_spec->freq / pFrame->sample_rate + 256;
 
 				int out_size = av_samples_get_buffer_size(NULL, as->Audio_pCodecCtx->channels, /*out_count*/ pFrame->nb_samples, AV_SAMPLE_FMT_S16, 1);
 
 				av_fast_malloc(&as->audio_buf1, &as->audio_buf1_size, out_size);
 				int len2 = swr_convert(as->au_convert_ctx, &as->audio_buf1, /*out_count*/ pFrame->nb_samples, (const uint8_t **)pFrame->data, pFrame->nb_samples);
 				as->audio_buf = as->audio_buf1;
-				//as->audio_buf = pFrame->data[0];
-				//as->audio_buf_size = out_size;
+				// as->audio_buf = pFrame->data[0];
+				// as->audio_buf_size = out_size;
 				as->audio_buf_size = len2 * as->Audio_pCodecCtx->channels * av_get_bytes_per_sample(AV_SAMPLE_FMT_S16);
-				//TRACE("au count = %d,out size = %d\n",out_count,out_size);
+				// TRACE("au count = %d,out size = %d\n",out_count,out_size);
 
 				as->audio_buf_index = 0;
 			}
@@ -380,7 +380,7 @@ void audio_callback(void *userdata, Uint8 *stream, int len)
 		stream += len1;
 		as->audio_buf_index += len1;
 	}
-	//TRACE("audio quit = %d,len = %d \n",*as->thread_exit,len);
+	// TRACE("audio quit = %d,len = %d \n",*as->thread_exit,len);
 }
 
 int WINAPI Thread_Play(LPVOID lpPara)
@@ -415,9 +415,9 @@ int WINAPI Thread_Play(LPVOID lpPara)
 	SDL_Texture *sdlTexture;
 	/*SDL_Rect sdlRect;
 	SDL_Rect sdlSrcRect;*/
-	//SDL_Thread *video_tid;
-	//SDL_Event event;
-	//struct SwrContext *au_convert_ctx;
+	// SDL_Thread *video_tid;
+	// SDL_Event event;
+	// struct SwrContext *au_convert_ctx;
 	struct SwsContext *img_convert_ctx;
 	int i, videoindex, audioindex;
 	videoindex = -1;
@@ -427,12 +427,12 @@ int WINAPI Thread_Play(LPVOID lpPara)
 		if (pFormatCtx[nPort]->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
 		{
 			videoindex = i;
-			//break;
+			// break;
 		}
 		if (pFormatCtx[nPort]->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO)
 		{
 			audioindex = i;
-			//break;
+			// break;
 		}
 	}
 	if (videoindex == -1)
@@ -503,7 +503,7 @@ int WINAPI Thread_Play(LPVOID lpPara)
 						break;
 					}
 				}
-				//wanted_channel_layout = av_get_default_channel_layout(wanted_spec.channels);
+				// wanted_channel_layout = av_get_default_channel_layout(wanted_spec.channels);
 
 				if (Audio_pCodecCtx)
 				{
@@ -541,13 +541,13 @@ int WINAPI Thread_Play(LPVOID lpPara)
 	pCodec = avcodec_find_decoder(pCodecCtx->codec_id);
 	if (pCodec == NULL)
 	{
-		//AfxMessageBox("Codec not found.\n");
+		// AfxMessageBox("Codec not found.\n");
 		sprintf(erro, "Codec not found.");
 		goto end;
 	}
 	if (avcodec_open2(pCodecCtx, pCodec, NULL) < 0)
 	{
-		//AfxMessageBox("Could not open codec.\n");
+		// AfxMessageBox("Could not open codec.\n");
 		sprintf(erro, "Could not open codec.");
 		goto end;
 	}
@@ -559,16 +559,16 @@ int WINAPI Thread_Play(LPVOID lpPara)
 	img_convert_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt,
 									 pCodecCtx->width, pCodecCtx->height, AV_PIX_FMT_YUV420P, SWS_BICUBIC, NULL, NULL, NULL);
 
-	//if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER)) {
+	// if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER)) {
 	//	//AfxMessageBox( "Could not initialize SDL\n");
 	//	return -1;
-	//}
-	//SDL 2.0 Support for multiple windows
+	// }
+	// SDL 2.0 Support for multiple windows
 	screen_w = pCodecCtx->width;
 	screen_h = pCodecCtx->height;
 	framerate = (float)(pFormatCtx[nPort]->streams[0]->r_frame_rate.num) / (pFormatCtx[nPort]->streams[0]->r_frame_rate.den);
 
-	//TRACE("rate = %5.2f\n",framerate);
+	// TRACE("rate = %5.2f\n",framerate);
 
 	//显示在弹出窗口
 	/*screen = SDL_CreateWindow("Simplest ffmpeg player's Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
@@ -579,19 +579,19 @@ int WINAPI Thread_Play(LPVOID lpPara)
 	//===========================================
 	if (!screen)
 	{
-		//AfxMessageBox("SDL: could not create window - exiting\n");
+		// AfxMessageBox("SDL: could not create window - exiting\n");
 		return -1;
 	}
 	sdlRenderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_ACCELERATED);
-	//IYUV: Y + U + V  (3 planes)
-	//YV12: Y + V + U  (3 planes)
+	// IYUV: Y + U + V  (3 planes)
+	// YV12: Y + V + U  (3 planes)
 	sdlTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_IYUV, SDL_TEXTUREACCESS_STREAMING /*SDL_TEXTUREACCESS_TARGET*/, pCodecCtx->width, pCodecCtx->height);
 
 	packet = (AVPacket *)av_malloc(sizeof(AVPacket));
 
-	//video_tid = SDL_CreateThread(sfp_refresh_thread,NULL,NULL);
+	// video_tid = SDL_CreateThread(sfp_refresh_thread,NULL,NULL);
 	//------------SDL End------------
-	//Event Loop
+	// Event Loop
 	prePts = 0;
 	timeBase = 0.0;
 	timeBase = av_q2d(pFormatCtx[nPort]->streams[videoindex]->time_base);
@@ -609,17 +609,17 @@ int WINAPI Thread_Play(LPVOID lpPara)
 
 	while (thread_exit[nPort] == 0)
 	{
-		//Wait
-		//SDL_WaitEvent(&event);
+		// Wait
+		// SDL_WaitEvent(&event);
 		if (thread_seek[nPort] > 0)
 		{
 			int defaultStreamIndex = av_find_default_stream_index(pFormatCtx[nPort]);
 			int timelen = pFormatCtx[nPort]->duration / 1000000;
 			if (timelen > 0)
 			{
-				//int seektime = thread_seek[nPort]*timelen/100;
+				// int seektime = thread_seek[nPort]*timelen/100;
 				int64_t seektime = FirstPts + av_rescale(thread_seek[nPort] * timelen / 100, pFormatCtx[nPort]->streams[videoindex]->time_base.den, pFormatCtx[nPort]->streams[videoindex]->time_base.num);
-				//av_seek_frame(pFormatCtx[nPort], -1 , (seektime + FirstPts/pFormatCtx[nPort]->streams[videoindex]->time_base.den) * AV_TIME_BASE, AVSEEK_FLAG_ANY);
+				// av_seek_frame(pFormatCtx[nPort], -1 , (seektime + FirstPts/pFormatCtx[nPort]->streams[videoindex]->time_base.den) * AV_TIME_BASE, AVSEEK_FLAG_ANY);
 				av_seek_frame(pFormatCtx[nPort], defaultStreamIndex, seektime, AVSEEK_FLAG_ANY);
 			}
 			thread_seek[nPort] = 0;
@@ -634,7 +634,7 @@ int WINAPI Thread_Play(LPVOID lpPara)
 		if (thread_jump[nPort] != 0)
 		{
 			int defaultStreamIndex = av_find_default_stream_index(pFormatCtx[nPort]);
-			//int timelen = pFormatCtx[nPort]->duration/1000000;
+			// int timelen = pFormatCtx[nPort]->duration/1000000;
 
 			int64_t seektime = FirstPts + av_rescale(CurrentTime[nPort] + thread_jump[nPort], pFormatCtx[nPort]->streams[videoindex]->time_base.den, pFormatCtx[nPort]->streams[videoindex]->time_base.num);
 
@@ -652,17 +652,17 @@ int WINAPI Thread_Play(LPVOID lpPara)
 		{
 			if (Audio_pCodecCtx)
 			{
-				//packet_queue_abort(&as->audioq);
+				// packet_queue_abort(&as->audioq);
 				packet_queue_flush(&as->audioq);
 				SDL_PauseAudio(1);
 
-				//packet_queue_put_private(&as->audioq, &flush_pkt);
+				// packet_queue_put_private(&as->audioq, &flush_pkt);
 			}
 			speed = play_speed[nPort];
 		}
 		else if (speed != 1)
 		{
-			//packet_queue_put_private(&as->audioq, &flush_pkt);
+			// packet_queue_put_private(&as->audioq, &flush_pkt);
 			if (Audio_pCodecCtx)
 			{
 				SDL_PauseAudio(0);
@@ -673,7 +673,7 @@ int WINAPI Thread_Play(LPVOID lpPara)
 		if (thread_pause[nPort] == 0)
 		{
 			//------------------------------
-			//TRACE("play\n");
+			// TRACE("play\n");
 
 			if (Audio_pCodecCtx && pause_flag != thread_pause[nPort])
 			{
@@ -691,9 +691,9 @@ int WINAPI Thread_Play(LPVOID lpPara)
 					ret = avcodec_decode_video2(pCodecCtx, pFrame, &got_picture, packet);
 					if (ret < 0)
 					{
-						//AfxMessageBox("Decode Error.\n");
-						//continue;
-						//return -1;
+						// AfxMessageBox("Decode Error.\n");
+						// continue;
+						// return -1;
 					}
 					if (FirstPtsFlag)
 					{
@@ -704,21 +704,21 @@ int WINAPI Thread_Play(LPVOID lpPara)
 
 					if (got_picture)
 					{
-						//TRACE("vPts = %d\n",pFrame->pkt_pts);
+						// TRACE("vPts = %d\n",pFrame->pkt_pts);
 						if (Audio_pCodecCtx)
 						{
 							as->vClock = (double)(packet->pts - FirstPts) / pFormatCtx[nPort]->streams[videoindex]->time_base.den;
 						}
 						sws_scale(img_convert_ctx, (const uint8_t *const *)pFrame->data, pFrame->linesize, 0, pCodecCtx->height, pFrameYUV->data, pFrameYUV->linesize);
-						//SDL---------------------------
+						// SDL---------------------------
 						SDL_RenderClear(sdlRenderer);
 						SDL_UpdateTexture(sdlTexture, NULL, pFrameYUV->data[0], pFrameYUV->linesize[0]);
-						//SDL_RenderClear( sdlRenderer );
-						//SDL_RenderCopy( sdlRenderer, sdlTexture, &sdlRect, &sdlRect );
+						// SDL_RenderClear( sdlRenderer );
+						// SDL_RenderCopy( sdlRenderer, sdlTexture, &sdlRect, &sdlRect );
 						SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, NULL);
 						SDL_RenderPresent(sdlRenderer);
-						//SDL End-----------------------
-						//SDL_Delay(40);
+						// SDL End-----------------------
+						// SDL_Delay(40);
 						diff = av_gettime() - diff;
 						if (Audio_pCodecCtx && as->aClock > 0)
 						{
@@ -733,7 +733,7 @@ int WINAPI Thread_Play(LPVOID lpPara)
 							}
 							else
 							{
-								//int64_t difPts = pFrame->pkt_pts - prePts;
+								// int64_t difPts = pFrame->pkt_pts - prePts;
 								int64_t delay = ((pFrame->pkt_pts - prePts) * 1000 * 1000 * timeBase) / play_speed[nPort] - diff - aDiff /* - (as->aClock*1000000)*/;
 								if (delay > 0 && delay < 1500000)
 								{
@@ -750,7 +750,7 @@ int WINAPI Thread_Play(LPVOID lpPara)
 				}
 				else if (packet->stream_index == audioindex && Audio_pCodecCtx != NULL && play_speed[nPort] == 1) //音频
 				{
-					//TRACE("aPts = %d\n",packet->pts);
+					// TRACE("aPts = %d\n",packet->pts);
 
 					aDiff = av_gettime();
 					packet->pts = av_rescale_q_rnd(packet->pts, pFormatCtx[nPort]->streams[audioindex]->time_base, Audio_pCodecCtx->time_base, (AVRounding)(AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));
@@ -769,7 +769,7 @@ int WINAPI Thread_Play(LPVOID lpPara)
 			}
 			else
 			{
-				//Exit Thread
+				// Exit Thread
 				thread_exit[nPort] = 1;
 				/*
 					if (PlayStyle[nPort] == PLAYMODE_FILE)
@@ -781,14 +781,14 @@ int WINAPI Thread_Play(LPVOID lpPara)
 						//thread_pause[nPort] = 1;
 					}
 						*/
-				//TRACE("exit\n");
+				// TRACE("exit\n");
 			}
 		}
 		else
 		{
 			if (Audio_pCodecCtx && pause_flag != thread_pause[nPort])
 			{
-				//packet_queue_flush(&as->audioq);
+				// packet_queue_flush(&as->audioq);
 				SDL_PauseAudio(1);
 				pause_flag = thread_pause[nPort];
 			}
@@ -814,12 +814,12 @@ end:
 	SDL_DestroyWindow(screen);
 
 	ShowWindow(hWnd, SW_SHOWNORMAL);
-	//SDL_Quit();
-	//FIX Small Bug
-	//SDL Hide Window When it finished
-	//CWnd::FromHandle(hWnd)->ShowWindow(SW_SHOWNORMAL);
+	// SDL_Quit();
+	// FIX Small Bug
+	// SDL Hide Window When it finished
+	// CWnd::FromHandle(hWnd)->ShowWindow(SW_SHOWNORMAL);
 	//--------------
-	//av_free(aviobuffer);
+	// av_free(aviobuffer);
 
 	av_frame_free(&pFrameYUV);
 	av_frame_free(&pFrame);
@@ -867,9 +867,9 @@ int __stdcall Video_OpenFile(long nPort, char *sFileName)
 	{
 		return -1;
 	}
-	//thread_pause[nPort] = 0;
+	// thread_pause[nPort] = 0;
 	thread_exit[nPort] = 1;
-	//Sleep(1000);
+	// Sleep(1000);
 
 	DecodeFlag[nPort] = 0;
 
@@ -900,7 +900,7 @@ int __stdcall Video_OpenFile(long nPort, char *sFileName)
 
 	if (avformat_find_stream_info(pFormatCtx[nPort], NULL) < 0)
 	{
-		//AfxMessageBox("Couldn't find stream information.\n");
+		// AfxMessageBox("Couldn't find stream information.\n");
 		DecodeFlag[nPort] = -1;
 		return -1;
 	}
@@ -933,10 +933,10 @@ int __stdcall Video_Seek(LONG nPort, char pos)
 	{
 		return -1;
 	}
-	//thread_pause[nPort] = 1;//
+	// thread_pause[nPort] = 1;//
 	thread_seek[nPort] = pos;
 	Sleep(100);
-	//thread_pause[nPort] = 0;
+	// thread_pause[nPort] = 0;
 
 	return 0;
 }
@@ -953,7 +953,7 @@ int __stdcall Video_Jump(LONG nPort, LONG sec, char JumpFlag)
 		return -1;
 	}
 
-	//thread_pause[nPort] = 1;//
+	// thread_pause[nPort] = 1;//
 
 	if (JumpFlag == VEDIOPLAY_JUMP_SET)
 	{
@@ -965,7 +965,7 @@ int __stdcall Video_Jump(LONG nPort, LONG sec, char JumpFlag)
 	}
 
 	Sleep(100);
-	//thread_pause[nPort] = 0;
+	// thread_pause[nPort] = 0;
 
 	return 0;
 }
@@ -1010,7 +1010,7 @@ int __stdcall Video_Stop(LONG nPort)
 	return 0;
 }
 
-//Callback
+// Callback
 int read_buffer(void *opaque, uint8_t *buf, int buf_size)
 {
 	char nPort = *(char *)opaque;
@@ -1020,7 +1020,7 @@ int read_buffer(void *opaque, uint8_t *buf, int buf_size)
 		CVideoBuf *temp = VideoList[nPort].front();
 		VideoList[nPort].pop_front();
 		memcpy(buf, temp->Vbuf, temp->len);
-		//TRACE("len = %d,port = %d\n",temp->len,nPort);
+		// TRACE("len = %d,port = %d\n",temp->len,nPort);
 		true_size = temp->len;
 		delete temp;
 
@@ -1038,15 +1038,15 @@ int WINAPI Thread_OpenStream(LPVOID lpPara)
 
 	if (avformat_open_input(&pFormatCtx[nPort], NULL, NULL, NULL) != 0)
 	{
-		//printf("Couldn't open input stream.\n");
-		//TRACE("Couldn't open input stream.\n");
+		// printf("Couldn't open input stream.\n");
+		// TRACE("Couldn't open input stream.\n");
 		DecodeFlag[nPort] = -1;
 		return -1;
 	}
 
 	if (avformat_find_stream_info(pFormatCtx[nPort], NULL) < 0)
 	{
-		//AfxMessageBox("Couldn't find stream information.\n");
+		// AfxMessageBox("Couldn't find stream information.\n");
 		DecodeFlag[nPort] = -1;
 		return -1;
 	}
@@ -1062,9 +1062,9 @@ int __stdcall Video_OpenStream(LONG nPort, DWORD nSize)
 	{
 		return -1;
 	}
-	//thread_pause[nPort] = 0;
+	// thread_pause[nPort] = 0;
 	thread_exit[nPort] = 1;
-	//Sleep(1000);
+	// Sleep(1000);
 
 	PlayStyle[nPort] = PLAYMODE_STREAM;
 	DecodeFlag[nPort] = 0;
@@ -1125,7 +1125,7 @@ int WINAPI Thread_Decode(LPVOID lpPara)
 	PlayInfo *temp = InfoDecList.front();
 	InfoDecList.pop();
 	LONG nPort = temp->CurrentPort;
-	//HWND hWnd = temp->CurrentHWND;
+	// HWND hWnd = temp->CurrentHWND;
 	delete temp;
 
 	pCB dataDeal = (pCB)lpPara;
@@ -1168,18 +1168,18 @@ int WINAPI Thread_Decode(LPVOID lpPara)
 	{
 		pCodecCtx->codec_id = AV_CODEC_ID_H264;
 		pCodecCtx->pix_fmt = AV_PIX_FMT_YUV420P;
-		//pCodecCtx->pix_fmt = AV_PIX_FMT_RGB24;
+		// pCodecCtx->pix_fmt = AV_PIX_FMT_RGB24;
 	}
 	pCodec = avcodec_find_decoder(pCodecCtx->codec_id);
 	if (pCodec == NULL)
 	{
-		//AfxMessageBox("Codec not found.\n");
+		// AfxMessageBox("Codec not found.\n");
 		sprintf(erro, "Codec not found.");
 		goto end;
 	}
 	if (avcodec_open2(pCodecCtx, pCodec, NULL) < 0)
 	{
-		//AfxMessageBox("Could not open codec.\n");
+		// AfxMessageBox("Could not open codec.\n");
 		sprintf(erro, "Could not open codec.");
 		goto end;
 	}
@@ -1189,36 +1189,36 @@ int WINAPI Thread_Decode(LPVOID lpPara)
 	out_buffer = (uint8_t *)av_malloc(avpicture_get_size(AV_PIX_FMT_BGR24, pCodecCtx->width, pCodecCtx->height));
 	re = avpicture_fill((AVPicture *)pFrameYUV, out_buffer, AV_PIX_FMT_BGR24, pCodecCtx->width, pCodecCtx->height);
 
-	/*img_convert_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt, 
+	/*img_convert_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt,
 			pCodecCtx->width, AV_PIX_FMT_RGB24, pCodecCtx->pix_fmt, SWS_BICUBIC, NULL, NULL, NULL);*/
 	img_convert_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt,
 									 pCodecCtx->width, pCodecCtx->height, AV_PIX_FMT_BGR24, SWS_BICUBIC, NULL, NULL, NULL);
 
 	framerate = (float)(pFormatCtx[nPort]->streams[0]->r_frame_rate.num) / (pFormatCtx[nPort]->streams[0]->r_frame_rate.den);
 
-	//TRACE("rate = %5.2f\n",framerate);
+	// TRACE("rate = %5.2f\n",framerate);
 
 	packet = (AVPacket *)av_malloc(sizeof(AVPacket));
 
-	//video_tid = SDL_CreateThread(sfp_refresh_thread,NULL,NULL);
+	// video_tid = SDL_CreateThread(sfp_refresh_thread,NULL,NULL);
 	//------------SDL End------------
-	//Event Loop
+	// Event Loop
 	prePts = 0;
 	timeBase = 0.0;
 	fileLen = 0;
 	res = 0;
 	time = 0;
 	timeBase = av_q2d(pFormatCtx[nPort]->streams[videoindex]->time_base);
-	//FILE *output=fopen("out.rgb","wb+");
+	// FILE *output=fopen("out.rgb","wb+");
 
 	while (thread_exit[nPort] == 0)
 	{
-		//Wait
-		//SDL_WaitEvent(&event);
+		// Wait
+		// SDL_WaitEvent(&event);
 		if (thread_pause[nPort] == 0)
 		{
 			//------------------------------
-			//TRACE("play\n");
+			// TRACE("play\n");
 			int64_t diff = av_gettime();
 			if (res = av_read_frame(pFormatCtx[nPort], packet) >= 0)
 			{
@@ -1229,9 +1229,9 @@ int WINAPI Thread_Decode(LPVOID lpPara)
 					ret = avcodec_decode_video2(pCodecCtx, pFrame, &got_picture, packet);
 					if (ret < 0)
 					{
-						//AfxMessageBox("Decode Error.\n");
-						//continue;
-						//return -1;
+						// AfxMessageBox("Decode Error.\n");
+						// continue;
+						// return -1;
 					}
 
 					if (got_picture)
@@ -1241,7 +1241,7 @@ int WINAPI Thread_Decode(LPVOID lpPara)
 						dataDeal(pFrameYUV->data[0], pCodecCtx->width, pCodecCtx->height, nPort);
 
 						diff = av_gettime() - diff;
-						//time = av_gettime();
+						// time = av_gettime();
 
 						if (prePts == 0)
 						{
@@ -1253,7 +1253,7 @@ int WINAPI Thread_Decode(LPVOID lpPara)
 
 							if (((difPts * 1000 * 1000 * timeBase) - diff) > 0 && ((difPts * 1000 * 1000 * timeBase) - diff) < 1000000)
 							{
-								//TRACE("SleepPts = %lf\n",(difPts*1000*1000*timeBase) - diff);
+								// TRACE("SleepPts = %lf\n",(difPts*1000*1000*timeBase) - diff);
 								av_usleep((difPts * 1000 * 1000 * timeBase) - diff);
 							}
 						}
@@ -1271,10 +1271,10 @@ int WINAPI Thread_Decode(LPVOID lpPara)
 				}
 				else if (PlayStyle[nPort] == PLAYMODE_STREAM)
 				{
-					//thread_pause[nPort] = 1;
+					// thread_pause[nPort] = 1;
 				}
 
-				//TRACE("exit\n");
+				// TRACE("exit\n");
 			}
 		}
 		else
@@ -1336,17 +1336,17 @@ int __stdcall Video_OpenDecode(LONG nPort, char *sFileName, pCB pCallBack)
 
 	if (avformat_find_stream_info(pFormatCtx[nPort], NULL) < 0)
 	{
-		//AfxMessageBox("Couldn't find stream information.\n");
+		// AfxMessageBox("Couldn't find stream information.\n");
 
 		return -1;
 	}
 
 	PlayInfo *temp = new PlayInfo;
 	temp->CurrentPort = nPort;
-	//temp->CurrentHWND = hWnd;
+	// temp->CurrentHWND = hWnd;
 	InfoDecList.push(temp);
 
-	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Thread_Decode, (void*)pCallBack, 0, NULL); //开启线程
+	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Thread_Decode, (void *)pCallBack, 0, NULL); //开启线程
 	return 0;
 }
 
@@ -1357,7 +1357,7 @@ int __stdcall Video_CloseDecode(LONG nPort)
 		return -1;
 	}
 
-	//DecodeFlag[nPort] = -1;
+	// DecodeFlag[nPort] = -1;
 	thread_exit[nPort] = 1;
 	return 0;
 }
@@ -1369,7 +1369,7 @@ int __stdcall Video_SetBGRPlay(HDC hdc)
 
 int __stdcall Video_BGR24Play(HDC hdc, unsigned char *data, int DestWidth, int DestHeight, int lXSrc, int lYSrc, int pSrcWidth, int pSrcHeight, int SrcWidth, int SrcHeight)
 {
-	//BMP Header
+	// BMP Header
 	BITMAPINFO m_bmphdr = {0};
 	DWORD dwBmpHdr = sizeof(BITMAPINFO);
 	m_bmphdr.bmiHeader.biBitCount = 24;
@@ -1398,13 +1398,13 @@ int __stdcall Video_BGR24Play(HDC hdc, unsigned char *data, int DestWidth, int D
 
 int WINAPI Thread_Record(LPVOID lpPara)
 {
-	//char* path = (char*)lpPara;
+	// char* path = (char*)lpPara;
 	PlayInfo *temp = RecordList.front();
 	RecordList.pop();
 	char TrainNum[50] = "";
 	char IPCName[50] = "";
 	LONG nPort = temp->CurrentPort;
-	//HWND hWnd = temp->CurrentHWND;
+	// HWND hWnd = temp->CurrentHWND;
 	char ch = temp->CH;
 	strcpy(TrainNum, temp->trainNum);
 	strcpy(IPCName, temp->IPCName);
@@ -1470,7 +1470,7 @@ CutFile:
 	if (!(ofmt->flags & AVFMT_NOFILE))
 	{
 		ret = avio_open(&ofmt_ctx->pb, FileName, AVIO_FLAG_WRITE);
-		//TRACE("avio\n");
+		// TRACE("avio\n");
 		if (ret < 0)
 		{
 			/*fprintf(stderr, "Could not open output file '%s'", out_filename);
@@ -1487,29 +1487,29 @@ CutFile:
 		goto end;
 	}
 
-	//SYSTEMTIME CRTime;
+	// SYSTEMTIME CRTime;
 
-	//pkt = av_packet_alloc();
-	//pkt = (AVPacket *)av_malloc(sizeof(AVPacket));
+	// pkt = av_packet_alloc();
+	// pkt = (AVPacket *)av_malloc(sizeof(AVPacket));
 
 	while (Record_exit[nPort] == 0)
 	{
 
 		GetLocalTime(&CRTime);
-		//if (CRTime.wMinute >= Time.wMinute ? CRTime.wMinute - Time.wMinute >= 10 : Time.wMinute - CRTime.wMinute <= 50)
+		// if (CRTime.wMinute >= Time.wMinute ? CRTime.wMinute - Time.wMinute >= 10 : Time.wMinute - CRTime.wMinute <= 50)
 		//{
 		//	//TRACE("cutFile\n");
 		//	av_write_trailer(ofmt_ctx);
 		//	avio_closep(&ofmt_ctx->pb);
 		//	avformat_free_context(ofmt_ctx);
 		//	goto CutFile;
-		//}
+		// }
 		if (CRTime.wMinute == 0 || CRTime.wMinute == 15 || CRTime.wMinute == 30 || CRTime.wMinute == 45)
 		{
-			//TRACE("cutFile\n");
+			// TRACE("cutFile\n");
 			if (CRTime.wMinute != min)
 			{
-				//sprintf(erro, "Cut File");
+				// sprintf(erro, "Cut File");
 				min = CRTime.wMinute;
 				av_write_trailer(ofmt_ctx);
 				avio_closep(&ofmt_ctx->pb);
@@ -1517,14 +1517,14 @@ CutFile:
 				memset(erro, 0, sizeof(erro));
 				goto CutFile;
 
-				//goto end;
+				// goto end;
 			}
 		}
 		else if (CRTime.wYear != Time.wYear || CRTime.wMonth != Time.wMonth || CRTime.wDay != Time.wDay || CRTime.wHour != Time.wHour)
 		{
 			sprintf(erro, "Time Changed");
-			//goto end;
-			//goto CutFile;
+			// goto end;
+			// goto CutFile;
 			break;
 		}
 
@@ -1545,15 +1545,15 @@ CutFile:
 		in_stream = pRecFormatCtx[nPort]->streams[pkt.stream_index];
 		out_stream = ofmt_ctx->streams[pkt.stream_index];
 
-		//log_packet(ifmt_ctx, &pkt, "in");
-		//TRACE("index = %d ,pre pts = %d dts = %d\n",pkt.stream_index,pkt.pts,pkt.dts);
+		// log_packet(ifmt_ctx, &pkt, "in");
+		// TRACE("index = %d ,pre pts = %d dts = %d\n",pkt.stream_index,pkt.pts,pkt.dts);
 		/* copy packet */
 		pkt.pts = av_rescale_q_rnd(pkt.pts, in_stream->time_base, out_stream->time_base, (AVRounding)(AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));
 		pkt.dts = av_rescale_q_rnd(pkt.dts, in_stream->time_base, out_stream->time_base, (AVRounding)(AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));
 		pkt.duration = av_rescale_q(pkt.duration, in_stream->time_base, out_stream->time_base);
 		pkt.pos = -1;
-		//log_packet(ofmt_ctx, &pkt, "out");
-		//TRACE("pts = %d dts = %d\n",pkt.pts,pkt.dts);
+		// log_packet(ofmt_ctx, &pkt, "out");
+		// TRACE("pts = %d dts = %d\n",pkt.pts,pkt.dts);
 
 		//由于海康摄像机升级后，第一包视频包的时间戳大于第二包，所以这里把第一包的时间戳置零
 		if (IsFirst && ofmt_ctx->streams[pkt.stream_index]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
@@ -1566,17 +1566,17 @@ CutFile:
 		ret = av_interleaved_write_frame(ofmt_ctx, &pkt);
 		/*av_buffer_unref(&pkt->buf);
 		delete[] pkt->data;*/
-		//av_packet_free(&pkt);
-		//av_free_packet(pkt);
+		// av_packet_free(&pkt);
+		// av_free_packet(pkt);
 		av_packet_unref(&pkt);
 
 		if (ret < 0)
 		{
-			//av_packet_unref(pkt);
+			// av_packet_unref(pkt);
 			sprintf(erro, "Error muxing packet");
 			break;
 		}
-		//if (ret < 0) {
+		// if (ret < 0) {
 		//	//fprintf(stderr, "Error muxing packet\n");
 		//	//if (++FailNum > 5)
 		//	//{
@@ -1585,12 +1585,12 @@ CutFile:
 		//	//	goto end;
 		//	//}
 		//
-		//}else
+		// }else
 		//{
 		//	FailNum = 0;
 		//	//av_packet_unref(&pkt);
-		//}
-		//av_packet_unref(pkt);
+		// }
+		// av_packet_unref(pkt);
 	}
 	av_write_trailer(ofmt_ctx);
 
@@ -1620,7 +1620,7 @@ end:
 	return 0;
 }
 
-int __stdcall Video_StartRecord(LONG nPort, char *sUrl, char *path, char *TrainNum, char *IPCName, char CH)
+int __stdcall Video_StartRecord(LONG nPort, const char *sUrl, const char *path, const char *TrainNum, const char *IPCName, int CH)
 {
 	if (nPort > MAX_PORT_NUM)
 	{
@@ -1656,7 +1656,7 @@ int __stdcall Video_StartRecord(LONG nPort, char *sUrl, char *path, char *TrainN
 
 	if (avformat_find_stream_info(pRecFormatCtx[nPort], NULL) < 0)
 	{
-		//AfxMessageBox("Couldn't find stream information.\n");
+		// AfxMessageBox("Couldn't find stream information.\n");
 
 		return -1;
 	}
@@ -1669,10 +1669,10 @@ int __stdcall Video_StartRecord(LONG nPort, char *sUrl, char *path, char *TrainN
 		temp->CH = 0;
 	strcpy(temp->trainNum, TrainNum);
 	strcpy(temp->IPCName, IPCName);
-	//temp->CurrentHWND = hWnd;
+	// temp->CurrentHWND = hWnd;
 	RecordList.push(temp);
 
-	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Thread_Record, path, 0, NULL); //开启线程
+	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Thread_Record, (void*)path, 0, NULL); //开启线程
 	return 0;
 }
 int __stdcall Video_StopRecord(LONG nPort)
@@ -1682,7 +1682,7 @@ int __stdcall Video_StopRecord(LONG nPort)
 		return -1;
 	}
 
-	//DecodeFlag[nPort] = -1;
+	// DecodeFlag[nPort] = -1;
 	Record_exit[nPort] = 1;
 	return 0;
 }
