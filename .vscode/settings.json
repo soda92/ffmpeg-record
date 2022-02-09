@@ -4,5 +4,6 @@
         "*.json": "jsonc",
         "*.spec": "ruby",
         "thread": "cpp"
-    }
+    },
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }

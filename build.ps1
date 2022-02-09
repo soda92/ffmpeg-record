@@ -1,3 +1,4 @@
+# https://devblogs.microsoft.com/powershell-community/determine-if-a-folder-exists/
 if (Test-Path -Path build) {
     Remove-Item -Path build -Recurse
 }

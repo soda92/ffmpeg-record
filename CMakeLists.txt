@@ -32,7 +32,7 @@ Secur32.lib
 Strmiids.lib)
 endif()
 
-target_link_libraries(videotools PRIVATE avcodec.lib avdevice.lib avfilter.lib avutil.lib avformat.lib SDL2.lib swresample.lib swscale.lib)
+target_link_libraries(videotools PRIVATE avcodec.lib avdevice.lib avfilter.lib avutil.lib avformat.lib swresample.lib swscale.lib)
 if(MSVC)
 target_link_libraries(videotools PRIVATE ${additional_dependencies})
 endif()
