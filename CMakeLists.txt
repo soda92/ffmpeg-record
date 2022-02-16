@@ -15,7 +15,10 @@ endif()
 find_package(SDL2 CONFIG REQUIRED)
 add_definitions(-D_WINDLL)
 
-add_library(videotools "VideoPlay.h" "VideoPlay.cpp")
+add_library(videotools SHARED "VideoPlay.h" "VideoPlay.cpp")
+
+set(libav_libs 
+avcodec.lib avdevice.lib avfilter.lib avutil.lib avformat.lib swresample.lib swscale.lib)
 
 if(MSVC)
 set(additional_dependencies
@@ -32,13 +35,16 @@ Secur32.lib
 Strmiids.lib)
 endif()
 
-target_link_libraries(videotools PRIVATE avcodec.lib avdevice.lib avfilter.lib avutil.lib avformat.lib swresample.lib swscale.lib)
+set(SDL_libs
+SDL2::SDL2 SDL2::SDL2main SDL2::SDL2-static)
+
+target_link_libraries(videotools ${libav_libs})
 if(MSVC)
-target_link_libraries(videotools PRIVATE ${additional_dependencies})
+target_link_libraries(videotools ${additional_dependencies})
 endif()
-target_link_libraries(videotools PRIVATE SDL2::SDL2 SDL2::SDL2main SDL2::SDL2-static)
+target_link_libraries(videotools ${SDL_libs})
 
 
 add_executable(test-client "test-client.cpp" "VideoPlay.h")
-target_link_libraries(test-client PRIVATE videotools)
+target_link_libraries(test-client videotools)
 #  bufferoverflowU.lib
