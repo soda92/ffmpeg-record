@@ -46,5 +46,11 @@ target_link_libraries(videotools ${SDL_libs})
 
 
 add_executable(test-client "test-client.cpp" "VideoPlay.h")
-target_link_libraries(test-client videotools)
+target_link_libraries(test-client PRIVATE videotools)
 #  bufferoverflowU.lib
+
+include_directories("D:/boost_1_78_0/" "C:/Python310/include")
+link_directories("D:\\boost_1_78_0\\stage\\lib" "C:/Python310/libs")
+
+add_library(video_lib SHARED "VideoPlay.h" "video_lib.cpp")
+target_link_libraries(video_lib PRIVATE videotools)
