@@ -50,7 +50,7 @@ _VEDIOPLAY_API int __stdcall Video_CloseDecode(LONG nPort);
 _VEDIOPLAY_API int __stdcall Video_SetBGRPlay(HDC hdc);
 _VEDIOPLAY_API int __stdcall Video_BGR24Play(HDC hdc, unsigned char *data, int DestWidth, int DestHeight, int lXSrc, int lYSrc, int pSrcWidth, int pSrcHeight, int SrcWidth, int SrcHeight);
 
-//将视频数据已PS流形式保存MP4文件
+//将视频数据保存MP4文件
 _VEDIOPLAY_API int __stdcall Video_StartRecord(LONG nPort, const char *sUrl, const char *path, const char *TrainNum, const char *IPCName, int CH = 0); // CH 文件名最后的通道号。默认为0 按照nPort赋值 不为0的情况按照CH的值赋值
 _VEDIOPLAY_API int __stdcall Video_StopRecord(LONG nPort);
 
